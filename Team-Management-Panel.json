@@ -1,0 +1,1812 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 📋 Team Management Panel\n\nActions: Add Team, Remove Team, Active Team, Deactive Team.\nEvery completed action sends a Vodafone-themed confirmation email.\n\n### Add\nNode owner → grouped? (+ interval) → voice path/URL → department → review → confirm → INSERT → email.\n\n### Remove / Deactive\nSelect active team → confirm → IS_ACTIVE = FALSE → email.\n\n### Active\nSelect inactive team → confirm → IS_ACTIVE = TRUE → email.",
+        "height": 320,
+        "width": 520,
+        "color": 4
+      },
+      "id": "n-ov",
+      "name": "📋 Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -200,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "👥 Automated Calls – Team Management",
+        "formDescription": "Add or remove & Active or De-active a team in the Automated Calls system",
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "action",
+              "fieldLabel": "Select Action",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Add Team"
+                  },
+                  {
+                    "option": "Remove Team"
+                  },
+                  {
+                    "option": "Active Team"
+                  },
+                  {
+                    "option": "Deactive Team"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "01777aea-9352-448e-86ce-043cbeca2044",
+      "name": "Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.4,
+      "position": [
+        208,
+        320
+      ],
+      "webhookId": "team-management-v1"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "Add Team",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Add Team"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "Remove Team",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Remove Team"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "Active Team",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Active Team"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.action }}",
+                    "rightValue": "Deactive Team",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Deactive Team"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-switch",
+      "name": "Check Action",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        430,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "node_owner",
+              "fieldLabel": "Node Owner (Team Name)",
+              "fieldType": "text",
+              "placeholder": "e.g. Tech IT-Cash Support",
+              "requiredField": true
+            },
+            {
+              "fieldName": "grouped",
+              "fieldLabel": "Grouped?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Yes"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldName": "voice_url",
+              "fieldLabel": "Voice URL",
+              "fieldType": "text",
+              "placeholder": "https://...",
+              "requiredField": true
+            },
+            {
+              "fieldName": "department",
+              "fieldLabel": "Department",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "IT"
+                  },
+                  {
+                    "option": "Service Management"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-addform",
+      "name": "Add Team Form",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        680,
+        -60
+      ],
+      "webhookId": "team-add-form-001"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.grouped }}",
+              "rightValue": "Yes",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n-ifgrouped",
+      "name": "Is Grouped?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        900,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldName": "grouping_interval",
+              "fieldLabel": "Grouping Interval (minutes)",
+              "fieldType": "number",
+              "placeholder": "e.g. 15",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-interval",
+      "name": "Grouping Interval Form",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1120,
+        -160
+      ],
+      "webhookId": "team-interval-form-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst f = $('Add Team Form').first().json;\nconst grouped = f.grouped === 'Yes';\nlet interval = null;\nif (grouped) {\n  const raw = $('Grouping Interval Form').first().json.grouping_interval;\n  interval = parseInt(raw, 10);\n  if (!Number.isInteger(interval) || interval < 1) throw new Error('Grouping interval must be a whole number of minutes >= 1');\n}\nconst voiceUrl = String(f.voice_url || '').trim();\nif (!voiceUrl) throw new Error('Voice file path / URL is required');\nconst nodeOwner = String(f.node_owner || '').trim();\nconst dept = f.department;\nconst summary = `<div style='background:#fffaf0;padding:20px;border-radius:10px;border:2px solid #ffcc00;font-family:sans-serif;'><h2 style='color:#cc3300;margin-top:0;'>⚠️ Review Before Adding Team</h2>\n<div style='background:white;padding:15px;border-radius:5px;border:1px solid #eee;line-height:1.8;'>\n<p><b>👥 Node Owner:</b> ${esc(nodeOwner)}</p>\n<p><b>🔗 Grouped:</b> ${grouped ? 'Yes' : 'No'}</p>\n<p><b>⏱️ Grouping Interval:</b> ${grouped ? interval + ' min' : 'N/A'}</p>\n<p><b>🔊 Voice URL:</b> ${esc(voiceUrl)}</p>\n<p><b>🏢 Department:</b> ${esc(dept)}</p></div>\n<p style='font-weight:bold;color:#cc3300;'>Choose Confirm and click Submit to add this team.</p></div>`;\nreturn [{ json: { node_owner: nodeOwner, grouped, grouped_flag: grouped ? 1 : 0, grouping_interval: interval, voice_url: voiceUrl, department: dept, summary_html: summary } }];"
+      },
+      "id": "n-norm",
+      "name": "Normalize Add Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1340,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "SELECT COUNT(*) AS CNT FROM \"AUTOMATEDCALLS\".\"NODE_OWNERS\" WHERE UPPER(NAME) = UPPER(:team_name)",
+        "options": {
+          "params": {
+            "values": [
+              {
+                "name": "team_name",
+                "valueString": "={{ $json.node_owner }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "n-dup",
+      "name": "Check Duplicate Team",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        -60
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "loose",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "dup-chk",
+              "leftValue": "={{ Number($json.CNT || 0) }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {
+          "looseTypeValidation": true
+        }
+      },
+      "id": "n-ifdup",
+      "name": "Team Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1780,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "🛑 Team Already Exists",
+        "completionMessage": "=<div style=\"background-color:#fff0f0;padding:20px;border-radius:10px;border:2px solid #cc0000;font-family:sans-serif;\"><h2 style=\"color:#cc0000;margin-top:0;\">🛑 Team Found</h2><p>The team <b>{{ $('Normalize Add Data').item.json.node_owner }}</b> already exists (active or inactive). Nothing was added. If it is inactive, use \"Active Team\" instead.</p></div>",
+        "options": {}
+      },
+      "id": "n-dupwarn",
+      "name": "Duplicate Warning",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2000,
+        -180
+      ],
+      "webhookId": "team-dup-warn-001"
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "elementName": "confirm-add-preview",
+              "html": "={{ $json.summary_html }}"
+            },
+            {
+              "fieldName": "confirm",
+              "fieldLabel": "Confirmation",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Confirm"
+                  },
+                  {
+                    "option": "Cancel"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "n-confadd",
+      "name": "Confirm Add",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2000,
+        20
+      ],
+      "webhookId": "team-confirm-add-001"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.confirm }}",
+              "rightValue": "Confirm",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n-ifconfadd",
+      "name": "Add Confirmed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2220,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "INSERT INTO \"AUTOMATEDCALLS\".\"NODE_OWNERS\" (NAME, IS_GROUPED, GROUPING_INTERVAL, VOICE_FILE_PATH, DEPARTMENT, IS_ACTIVE) VALUES (:name, CASE WHEN :grouped = '1' THEN TRUE ELSE FALSE END, TO_NUMBER(:interval), :voice_url, :dept, TRUE)",
+        "options": {
+          "params": {
+            "values": [
+              {
+                "name": "name",
+                "valueString": "={{ $('Normalize Add Data').item.json.node_owner }}"
+              },
+              {
+                "name": "grouped",
+                "valueString": "={{ $('Normalize Add Data').item.json.grouped_flag.toString() }}"
+              },
+              {
+                "name": "interval",
+                "valueString": "={{ $('Normalize Add Data').item.json.grouping_interval ?? '' }}"
+              },
+              {
+                "name": "voice_url",
+                "valueString": "={{ $('Normalize Add Data').item.json.voice_url }}"
+              },
+              {
+                "name": "dept",
+                "valueString": "={{ $('Normalize Add Data').item.json.department }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "n-insert",
+      "name": "Insert Team",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        2440,
+        -60
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "✅ Action Done",
+        "completionMessage": "=🟢 <b>Team added successfully!</b><br><br>👥 <b>Node Owner:</b> {{ $('Normalize Add Data').item.json.node_owner }}<br>🔗 <b>Grouped:</b> {{ $('Normalize Add Data').item.json.grouped ? 'Yes – every ' + $('Normalize Add Data').item.json.grouping_interval + ' min' : 'No' }}<br>🔊 <b>Voice URL:</b> {{ $('Normalize Add Data').item.json.voice_url }}<br>🏢 <b>Department:</b> {{ $('Normalize Add Data').item.json.department }}",
+        "options": {}
+      },
+      "id": "n-okadd",
+      "name": "Success - Added",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2660,
+        -60
+      ],
+      "webhookId": "team-ok-add-001"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst VODA_RED = '#E60000', VODA_BLACK = '#333333', VODA_GREY = '#F4F4F4', VODA_DARK_GREY = '#666666';\nconst HEADER = '#2e7d32';\nconst src = $('Normalize Add Data').first().json;\nconst now = new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' });\nconst rows = [['👥 Node Owner:', src.node_owner], ['🔗 Grouped:', src.grouped ? 'Yes' : 'No'], ['⏱️ Grouping Interval:', src.grouped ? src.grouping_interval + ' min' : 'N/A'], ['🔊 Voice URL / Path:', src.voice_url], ['🏢 Department:', src.department], ['🕒 Added At:', now]];\nconst rowsHtml = rows.map(([k, v]) => `<tr><td style=\"padding:8px 0;font-size:13px;color:${VODA_DARK_GREY};width:170px;\"><strong>${k}</strong></td><td style=\"padding:8px 0;font-size:13px;\">${esc(v)}</td></tr>`).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"></head>\n<body style=\"margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:${VODA_BLACK};\">\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:${VODA_GREY};padding:20px 0;\">\n    <tr><td align=\"center\">\n      <table role=\"presentation\" width=\"650\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);\">\n        <!-- Header -->\n        <tr><td style=\"background:${HEADER};padding:20px 24px;color:#fff;\">\n          <div style=\"font-size:20px;font-weight:600;\">🟢 Team ADDED</div>\n          <div style=\"font-size:13px;margin-top:6px;\">Automated Calls System – Team Management Panel</div>\n          <div style=\"font-size:12px;margin-top:4px;\">${now}</div>\n        </td></tr>\n        <!-- Banner -->\n        <tr><td style=\"padding:16px 24px;background:#d4edda;border-left:4px solid #28a745;\">\n          <div style=\"font-size:14px;color:#155724;line-height:1.6;\">✅ A new team has been <strong>added and activated</strong>. It will now receive automated calls.</div>\n        </td></tr>\n        <!-- Details -->\n        <tr><td style=\"padding:24px 24px 0;\">\n          <div style=\"font-weight:600;font-size:15px;color:${VODA_BLACK};border-bottom:2px solid ${VODA_RED};padding-bottom:8px;\">Action Details</div>\n        </td></tr>\n        <tr><td style=\"padding:16px 24px 24px;\">\n          <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">${rowsHtml}</table>\n        </td></tr>\n        <!-- Footer Note -->\n        <tr><td style=\"padding:16px 24px;color:${VODA_DARK_GREY};font-size:11px;background:#fafafa;border-top:1px solid #ddd;\">\n          <strong>Note:</strong> This is an automated notification from the Team Management Panel. Changes take effect for the Automated Calls system as shown above.\n        </td></tr>\n        <!-- Vodafone Footer -->\n        <tr><td style=\"background:#4A4A4A;color:#ffffff;padding:16px 24px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"text-align:center;font-size:11px;font-weight:600;padding-bottom:4px;\">© ${new Date().getFullYear()} Vodafone. All rights reserved.</td></tr>\n            <tr><td style=\"text-align:center;font-size:10px;opacity:0.9;\">IT AI &amp; Automation Software Squad &nbsp;|&nbsp; Automated Calls System</td></tr>\n          </table>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>`;\n\nreturn [{ json: { email_body: html, subject: `🟢 Team ADDED – ${src.node_owner}`, toEmail: 'TECHIT-AIandAutomationSoftwareEngineering@Vodafone.com.eg' } }];"
+      },
+      "id": "n-mailadd-gen",
+      "name": "Generate HTML Email Add",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "AutomatedCalls@Vodafone.com.eg",
+        "toEmail": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false,
+          "ccEmail": "ITSOC.Notification@vodafone.com.eg"
+        }
+      },
+      "id": "n-mailadd",
+      "name": "Send Email Add",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        3100,
+        -60
+      ],
+      "webhookId": "team-mail-add-001",
+      "credentials": {
+        "smtp": {
+          "id": "zStiyE3qV25GL2su",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "❎ Cancelled",
+        "completionMessage": "No changes were made to the database.",
+        "options": {}
+      },
+      "id": "n-canadd",
+      "name": "Cancelled - Add",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2440,
+        120
+      ],
+      "webhookId": "team-cancel-add-001"
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "SELECT NAME FROM \"AUTOMATEDCALLS\".\"NODE_OWNERS\" WHERE IS_ACTIVE = TRUE ORDER BY NAME",
+        "options": {
+          "params": {
+            "values": []
+          }
+        }
+      },
+      "id": "remove-get",
+      "name": "Get Active Teams",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        420
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst rows = $input.all().map(i => i.json).filter(r => r && r.NAME);\nconst opts = rows.length ? rows.map(r => ({ option: String(r.NAME) })) : [{ option: 'No active teams found' }];\nconst fields = [{ fieldLabel: 'Select Team to Remove', fieldType: 'dropdown', fieldOptions: opts, requiredField: true }];\nreturn [{ json: { formJson: JSON.stringify(fields), teamCount: rows.length } }];"
+      },
+      "id": "remove-build",
+      "name": "Build Remove Form",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "🗑️ Remove Team",
+        "formDescription": "Select the team to remove",
+        "defineForm": "json",
+        "jsonOutput": "={{ $json.formJson }}",
+        "options": {}
+      },
+      "id": "remove-sel",
+      "name": "Select Team to Remove",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1160,
+        420
+      ],
+      "webhookId": "team-rm-sel"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst team = $input.first().json['Select Team to Remove'];\nif (team === 'No active teams found') throw new Error('No active teams found');\nconst summary = `<div style='background:#fffaf0;padding:20px;border-radius:10px;border:2px solid #ffcc00;font-family:sans-serif;'><h2 style='color:#cc3300;margin-top:0;'>⚠️ Review Before Removing Team</h2>\n<div style='background:white;padding:15px;border-radius:5px;border:1px solid #eee;line-height:1.8;'>\n<p><b>👥 Team:</b> ${esc(team)}</p></div>\n<p style='font-weight:bold;color:#cc3300;'>Choose Confirm and click Submit. The team will be deactivated and will no longer receive automated calls.</p></div>`;\nreturn [{ json: { team_name: team, summary_html: summary } }];"
+      },
+      "id": "remove-prep",
+      "name": "Prepare Remove Confirm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "elementName": "confirm-remove-preview",
+              "html": "={{ $json.summary_html }}"
+            },
+            {
+              "fieldName": "confirm",
+              "fieldLabel": "Confirmation",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Confirm"
+                  },
+                  {
+                    "option": "Cancel"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "remove-conf",
+      "name": "Confirm Remove",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1600,
+        420
+      ],
+      "webhookId": "team-rm-conf"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.confirm }}",
+              "rightValue": "Confirm",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "remove-iff",
+      "name": "Remove Confirmed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "UPDATE \"AUTOMATEDCALLS\".\"NODE_OWNERS\" SET IS_ACTIVE = FALSE WHERE NAME = :team_name AND IS_ACTIVE = TRUE",
+        "options": {
+          "params": {
+            "values": [
+              {
+                "name": "team_name",
+                "valueString": "={{ $('Prepare Remove Confirm').item.json.team_name }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "remove-upd",
+      "name": "Remove Team (DB)",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        420
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "✅ Action Done",
+        "completionMessage": "==🔴 <b>Team removed successfully!</b><br><i>It will no longer receive automated calls.</i><br><br>👥 <b>Team:</b> {{ $('Prepare Remove Confirm').item.json.team_name }}",
+        "options": {}
+      },
+      "id": "remove-ok",
+      "name": "Success - Remove",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2260,
+        420
+      ],
+      "webhookId": "team-rm-ok"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst VODA_RED = '#E60000', VODA_BLACK = '#333333', VODA_GREY = '#F4F4F4', VODA_DARK_GREY = '#666666';\nconst HEADER = '#E60000';\nconst src = $('Prepare Remove Confirm').first().json;\nconst now = new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' });\nconst rows = [['👥 Team:', src.team_name], ['⚙️ Action:', 'Removed'], ['📌 New Status:', 'Inactive'], ['🕒 Removed At:', now]];\nconst rowsHtml = rows.map(([k, v]) => `<tr><td style=\"padding:8px 0;font-size:13px;color:${VODA_DARK_GREY};width:170px;\"><strong>${k}</strong></td><td style=\"padding:8px 0;font-size:13px;\">${esc(v)}</td></tr>`).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"></head>\n<body style=\"margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:${VODA_BLACK};\">\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:${VODA_GREY};padding:20px 0;\">\n    <tr><td align=\"center\">\n      <table role=\"presentation\" width=\"650\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);\">\n        <!-- Header -->\n        <tr><td style=\"background:${HEADER};padding:20px 24px;color:#fff;\">\n          <div style=\"font-size:20px;font-weight:600;\">🔴 Team REMOVED</div>\n          <div style=\"font-size:13px;margin-top:6px;\">Automated Calls System – Team Management Panel</div>\n          <div style=\"font-size:12px;margin-top:4px;\">${now}</div>\n        </td></tr>\n        <!-- Banner -->\n        <tr><td style=\"padding:16px 24px;background:#fff3cd;border-left:4px solid #ffc107;\">\n          <div style=\"font-size:14px;color:#856404;line-height:1.6;\">🛑 The team has been <strong>removed</strong> and will <strong>no longer receive</strong> automated calls. To bring it back, use \"Active Team\" from the panel.</div>\n        </td></tr>\n        <!-- Details -->\n        <tr><td style=\"padding:24px 24px 0;\">\n          <div style=\"font-weight:600;font-size:15px;color:${VODA_BLACK};border-bottom:2px solid ${VODA_RED};padding-bottom:8px;\">Action Details</div>\n        </td></tr>\n        <tr><td style=\"padding:16px 24px 24px;\">\n          <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">${rowsHtml}</table>\n        </td></tr>\n        <!-- Footer Note -->\n        <tr><td style=\"padding:16px 24px;color:${VODA_DARK_GREY};font-size:11px;background:#fafafa;border-top:1px solid #ddd;\">\n          <strong>Note:</strong> This is an automated notification from the Team Management Panel. Changes take effect for the Automated Calls system as shown above.\n        </td></tr>\n        <!-- Vodafone Footer -->\n        <tr><td style=\"background:#4A4A4A;color:#ffffff;padding:16px 24px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"text-align:center;font-size:11px;font-weight:600;padding-bottom:4px;\">© ${new Date().getFullYear()} Vodafone. All rights reserved.</td></tr>\n            <tr><td style=\"text-align:center;font-size:10px;opacity:0.9;\">IT AI &amp; Automation Software Squad &nbsp;|&nbsp; Automated Calls System</td></tr>\n          </table>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>`;\n\nreturn [{ json: { email_body: html, subject: `🔴 Team REMOVED – ${src.team_name}`, toEmail: 'TECHIT-AIandAutomationSoftwareEngineering@Vodafone.com.eg' } }];"
+      },
+      "id": "remove-mailgen",
+      "name": "Generate HTML Email Remove",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "AutomatedCalls@Vodafone.com.eg",
+        "toEmail": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false,
+          "ccEmail": "ITSOC.Notification@vodafone.com.eg"
+        }
+      },
+      "id": "remove-mail",
+      "name": "Send Email Remove",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2700,
+        420
+      ],
+      "webhookId": "team-rm-mail",
+      "credentials": {
+        "smtp": {
+          "id": "zStiyE3qV25GL2su",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "❎ Cancelled",
+        "completionMessage": "No changes were made to the database.",
+        "options": {}
+      },
+      "id": "remove-can",
+      "name": "Cancelled - Remove",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2040,
+        580
+      ],
+      "webhookId": "team-rm-can"
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "SELECT NAME FROM \"AUTOMATEDCALLS\".\"NODE_OWNERS\" WHERE IS_ACTIVE = FALSE ORDER BY NAME",
+        "options": {
+          "params": {
+            "values": []
+          }
+        }
+      },
+      "id": "activate-get",
+      "name": "Get Inactive Teams",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        780
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst rows = $input.all().map(i => i.json).filter(r => r && r.NAME);\nconst opts = rows.length ? rows.map(r => ({ option: String(r.NAME) })) : [{ option: 'No inactive teams found' }];\nconst fields = [{ fieldLabel: 'Select Team to Activate', fieldType: 'dropdown', fieldOptions: opts, requiredField: true }];\nreturn [{ json: { formJson: JSON.stringify(fields), teamCount: rows.length } }];"
+      },
+      "id": "activate-build",
+      "name": "Build Activate Form",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "✅ Active Team",
+        "formDescription": "Select the team to activate",
+        "defineForm": "json",
+        "jsonOutput": "={{ $json.formJson }}",
+        "options": {}
+      },
+      "id": "activate-sel",
+      "name": "Select Team to Activate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1160,
+        780
+      ],
+      "webhookId": "team-act-sel"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst team = $input.first().json['Select Team to Activate'];\nif (team === 'No inactive teams found') throw new Error('No inactive teams found');\nconst summary = `<div style='background:#fffaf0;padding:20px;border-radius:10px;border:2px solid #ffcc00;font-family:sans-serif;'><h2 style='color:#cc3300;margin-top:0;'>⚠️ Review Before Activating Team</h2>\n<div style='background:white;padding:15px;border-radius:5px;border:1px solid #eee;line-height:1.8;'>\n<p><b>👥 Team:</b> ${esc(team)}</p></div>\n<p style='font-weight:bold;color:#cc3300;'>Choose Confirm and click Submit. The team will be activated and will receive automated calls.</p></div>`;\nreturn [{ json: { team_name: team, summary_html: summary } }];"
+      },
+      "id": "activate-prep",
+      "name": "Prepare Activate Confirm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "elementName": "confirm-activate-preview",
+              "html": "={{ $json.summary_html }}"
+            },
+            {
+              "fieldName": "confirm",
+              "fieldLabel": "Confirmation",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Confirm"
+                  },
+                  {
+                    "option": "Cancel"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "activate-conf",
+      "name": "Confirm Activate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1600,
+        780
+      ],
+      "webhookId": "team-act-conf"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.confirm }}",
+              "rightValue": "Confirm",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "activate-iff",
+      "name": "Activate Confirmed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "UPDATE \"AUTOMATEDCALLS\".\"NODE_OWNERS\" SET IS_ACTIVE = TRUE WHERE NAME = :team_name AND IS_ACTIVE = FALSE",
+        "options": {
+          "params": {
+            "values": [
+              {
+                "name": "team_name",
+                "valueString": "={{ $('Prepare Activate Confirm').item.json.team_name }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "activate-upd",
+      "name": "Activate Team (DB)",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        780
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "✅ Action Done",
+        "completionMessage": "==🟢 <b>Team activated successfully!</b><br><i>It will now receive automated calls.</i><br><br>👥 <b>Team:</b> {{ $('Prepare Activate Confirm').item.json.team_name }}",
+        "options": {}
+      },
+      "id": "activate-ok",
+      "name": "Success - Activate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2260,
+        780
+      ],
+      "webhookId": "team-act-ok"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst VODA_RED = '#E60000', VODA_BLACK = '#333333', VODA_GREY = '#F4F4F4', VODA_DARK_GREY = '#666666';\nconst HEADER = '#2e7d32';\nconst src = $('Prepare Activate Confirm').first().json;\nconst now = new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' });\nconst rows = [['👥 Team:', src.team_name], ['⚙️ Action:', 'Activated'], ['📌 New Status:', 'Active'], ['🕒 Activated At:', now]];\nconst rowsHtml = rows.map(([k, v]) => `<tr><td style=\"padding:8px 0;font-size:13px;color:${VODA_DARK_GREY};width:170px;\"><strong>${k}</strong></td><td style=\"padding:8px 0;font-size:13px;\">${esc(v)}</td></tr>`).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"></head>\n<body style=\"margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:${VODA_BLACK};\">\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:${VODA_GREY};padding:20px 0;\">\n    <tr><td align=\"center\">\n      <table role=\"presentation\" width=\"650\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);\">\n        <!-- Header -->\n        <tr><td style=\"background:${HEADER};padding:20px 24px;color:#fff;\">\n          <div style=\"font-size:20px;font-weight:600;\">🟢 Team ACTIVATED</div>\n          <div style=\"font-size:13px;margin-top:6px;\">Automated Calls System – Team Management Panel</div>\n          <div style=\"font-size:12px;margin-top:4px;\">${now}</div>\n        </td></tr>\n        <!-- Banner -->\n        <tr><td style=\"padding:16px 24px;background:#d4edda;border-left:4px solid #28a745;\">\n          <div style=\"font-size:14px;color:#155724;line-height:1.6;\">✅ The team has been <strong>activated</strong> and will now receive automated calls.</div>\n        </td></tr>\n        <!-- Details -->\n        <tr><td style=\"padding:24px 24px 0;\">\n          <div style=\"font-weight:600;font-size:15px;color:${VODA_BLACK};border-bottom:2px solid ${VODA_RED};padding-bottom:8px;\">Action Details</div>\n        </td></tr>\n        <tr><td style=\"padding:16px 24px 24px;\">\n          <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">${rowsHtml}</table>\n        </td></tr>\n        <!-- Footer Note -->\n        <tr><td style=\"padding:16px 24px;color:${VODA_DARK_GREY};font-size:11px;background:#fafafa;border-top:1px solid #ddd;\">\n          <strong>Note:</strong> This is an automated notification from the Team Management Panel. Changes take effect for the Automated Calls system as shown above.\n        </td></tr>\n        <!-- Vodafone Footer -->\n        <tr><td style=\"background:#4A4A4A;color:#ffffff;padding:16px 24px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"text-align:center;font-size:11px;font-weight:600;padding-bottom:4px;\">© ${new Date().getFullYear()} Vodafone. All rights reserved.</td></tr>\n            <tr><td style=\"text-align:center;font-size:10px;opacity:0.9;\">IT AI &amp; Automation Software Squad &nbsp;|&nbsp; Automated Calls System</td></tr>\n          </table>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>`;\n\nreturn [{ json: { email_body: html, subject: `🟢 Team ACTIVATED – ${src.team_name}`, toEmail: 'TECHIT-AIandAutomationSoftwareEngineering@Vodafone.com.eg' } }];"
+      },
+      "id": "activate-mailgen",
+      "name": "Generate HTML Email Activate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        780
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "AutomatedCalls@Vodafone.com.eg",
+        "toEmail": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false,
+          "ccEmail": "ITSOC.Notification@vodafone.com.eg"
+        }
+      },
+      "id": "activate-mail",
+      "name": "Send Email Activate",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2700,
+        780
+      ],
+      "webhookId": "team-act-mail",
+      "credentials": {
+        "smtp": {
+          "id": "zStiyE3qV25GL2su",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "❎ Cancelled",
+        "completionMessage": "No changes were made to the database.",
+        "options": {}
+      },
+      "id": "activate-can",
+      "name": "Cancelled - Activate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2040,
+        940
+      ],
+      "webhookId": "team-act-can"
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "SELECT NAME FROM \"AUTOMATEDCALLS\".\"NODE_OWNERS\" WHERE IS_ACTIVE = TRUE ORDER BY NAME",
+        "options": {
+          "params": {
+            "values": []
+          }
+        }
+      },
+      "id": "deactivate-get",
+      "name": "Get Active Teams (Deactive)",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        720,
+        1140
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      },
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst rows = $input.all().map(i => i.json).filter(r => r && r.NAME);\nconst opts = rows.length ? rows.map(r => ({ option: String(r.NAME) })) : [{ option: 'No active teams found' }];\nconst fields = [{ fieldLabel: 'Select Team to Deactivate', fieldType: 'dropdown', fieldOptions: opts, requiredField: true }];\nreturn [{ json: { formJson: JSON.stringify(fields), teamCount: rows.length } }];"
+      },
+      "id": "deactivate-build",
+      "name": "Build Deactivate Form",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        1140
+      ]
+    },
+    {
+      "parameters": {
+        "formTitle": "⛔ Deactive Team",
+        "formDescription": "Select the team to deactivate",
+        "defineForm": "json",
+        "jsonOutput": "={{ $json.formJson }}",
+        "options": {}
+      },
+      "id": "deactivate-sel",
+      "name": "Select Team to Deactivate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1160,
+        1140
+      ],
+      "webhookId": "team-deact-sel"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst team = $input.first().json['Select Team to Deactivate'];\nif (team === 'No active teams found') throw new Error('No active teams found');\nconst summary = `<div style='background:#fffaf0;padding:20px;border-radius:10px;border:2px solid #ffcc00;font-family:sans-serif;'><h2 style='color:#cc3300;margin-top:0;'>⚠️ Review Before Deactivating Team</h2>\n<div style='background:white;padding:15px;border-radius:5px;border:1px solid #eee;line-height:1.8;'>\n<p><b>👥 Team:</b> ${esc(team)}</p></div>\n<p style='font-weight:bold;color:#cc3300;'>Choose Confirm and click Submit. The team will be deactivated and will no longer receive automated calls.</p></div>`;\nreturn [{ json: { team_name: team, summary_html: summary } }];"
+      },
+      "id": "deactivate-prep",
+      "name": "Prepare Deactivate Confirm",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        1140
+      ]
+    },
+    {
+      "parameters": {
+        "formFields": {
+          "values": [
+            {
+              "fieldType": "html",
+              "elementName": "confirm-deactivate-preview",
+              "html": "={{ $json.summary_html }}"
+            },
+            {
+              "fieldName": "confirm",
+              "fieldLabel": "Confirmation",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Confirm"
+                  },
+                  {
+                    "option": "Cancel"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "deactivate-conf",
+      "name": "Confirm Deactivate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        1600,
+        1140
+      ],
+      "webhookId": "team-deact-conf"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.confirm }}",
+              "rightValue": "Confirm",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "deactivate-iff",
+      "name": "Deactivate Confirmed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        1140
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "execute",
+        "query": "UPDATE \"AUTOMATEDCALLS\".\"NODE_OWNERS\" SET IS_ACTIVE = FALSE WHERE NAME = :team_name AND IS_ACTIVE = TRUE",
+        "options": {
+          "params": {
+            "values": [
+              {
+                "name": "team_name",
+                "valueString": "={{ $('Prepare Deactivate Confirm').item.json.team_name }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "deactivate-upd",
+      "name": "Deactivate Team (DB)",
+      "type": "n8n-nodes-base.oracleDatabase",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        1140
+      ],
+      "credentials": {
+        "oracleDBApi": {
+          "id": "dQ19XRoBHVbhU79K",
+          "name": "Oracle Database Credentials account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "✅ Action Done",
+        "completionMessage": "==🔴 <b>Team deactivated successfully!</b><br><i>It will no longer receive automated calls.</i><br><br>👥 <b>Team:</b> {{ $('Prepare Deactivate Confirm').item.json.team_name }}",
+        "options": {}
+      },
+      "id": "deactivate-ok",
+      "name": "Success - Deactivate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2260,
+        1140
+      ],
+      "webhookId": "team-deact-ok"
+    },
+    {
+      "parameters": {
+        "jsCode": "const esc = s => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');\nconst VODA_RED = '#E60000', VODA_BLACK = '#333333', VODA_GREY = '#F4F4F4', VODA_DARK_GREY = '#666666';\nconst HEADER = '#E60000';\nconst src = $('Prepare Deactivate Confirm').first().json;\nconst now = new Date().toLocaleString('en-US', { timeZone: 'Africa/Cairo' });\nconst rows = [['👥 Team:', src.team_name], ['⚙️ Action:', 'Deactivated'], ['📌 New Status:', 'Inactive'], ['🕒 Deactivated At:', now]];\nconst rowsHtml = rows.map(([k, v]) => `<tr><td style=\"padding:8px 0;font-size:13px;color:${VODA_DARK_GREY};width:170px;\"><strong>${k}</strong></td><td style=\"padding:8px 0;font-size:13px;\">${esc(v)}</td></tr>`).join('');\n\nconst html = `<!DOCTYPE html>\n<html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\"></head>\n<body style=\"margin:0;padding:0;background:#ffffff;font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:${VODA_BLACK};\">\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:${VODA_GREY};padding:20px 0;\">\n    <tr><td align=\"center\">\n      <table role=\"presentation\" width=\"650\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);\">\n        <!-- Header -->\n        <tr><td style=\"background:${HEADER};padding:20px 24px;color:#fff;\">\n          <div style=\"font-size:20px;font-weight:600;\">🔴 Team DEACTIVATED</div>\n          <div style=\"font-size:13px;margin-top:6px;\">Automated Calls System – Team Management Panel</div>\n          <div style=\"font-size:12px;margin-top:4px;\">${now}</div>\n        </td></tr>\n        <!-- Banner -->\n        <tr><td style=\"padding:16px 24px;background:#fff3cd;border-left:4px solid #ffc107;\">\n          <div style=\"font-size:14px;color:#856404;line-height:1.6;\">⛔ The team has been <strong>deactivated</strong> and will <strong>no longer receive</strong> automated calls. To re-enable it, use \"Active Team\" from the panel.</div>\n        </td></tr>\n        <!-- Details -->\n        <tr><td style=\"padding:24px 24px 0;\">\n          <div style=\"font-weight:600;font-size:15px;color:${VODA_BLACK};border-bottom:2px solid ${VODA_RED};padding-bottom:8px;\">Action Details</div>\n        </td></tr>\n        <tr><td style=\"padding:16px 24px 24px;\">\n          <table width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">${rowsHtml}</table>\n        </td></tr>\n        <!-- Footer Note -->\n        <tr><td style=\"padding:16px 24px;color:${VODA_DARK_GREY};font-size:11px;background:#fafafa;border-top:1px solid #ddd;\">\n          <strong>Note:</strong> This is an automated notification from the Team Management Panel. Changes take effect for the Automated Calls system as shown above.\n        </td></tr>\n        <!-- Vodafone Footer -->\n        <tr><td style=\"background:#4A4A4A;color:#ffffff;padding:16px 24px;\">\n          <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">\n            <tr><td style=\"text-align:center;font-size:11px;font-weight:600;padding-bottom:4px;\">© ${new Date().getFullYear()} Vodafone. All rights reserved.</td></tr>\n            <tr><td style=\"text-align:center;font-size:10px;opacity:0.9;\">IT AI &amp; Automation Software Squad &nbsp;|&nbsp; Automated Calls System</td></tr>\n          </table>\n        </td></tr>\n      </table>\n    </td></tr>\n  </table>\n</body></html>`;\n\nreturn [{ json: { email_body: html, subject: `🔴 Team DEACTIVATED – ${src.team_name}`, toEmail: 'TECHIT-AIandAutomationSoftwareEngineering@Vodafone.com.eg' } }];"
+      },
+      "id": "deactivate-mailgen",
+      "name": "Generate HTML Email Deactivate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        1140
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "AutomatedCalls@Vodafone.com.eg",
+        "toEmail": "={{ $json.toEmail }}",
+        "subject": "={{ $json.subject }}",
+        "html": "={{ $json.email_body }}",
+        "options": {
+          "appendAttribution": false,
+          "ccEmail": "ITSOC.Notification@vodafone.com.eg"
+        }
+      },
+      "id": "deactivate-mail",
+      "name": "Send Email Deactivate",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2700,
+        1140
+      ],
+      "webhookId": "team-deact-mail",
+      "credentials": {
+        "smtp": {
+          "id": "zStiyE3qV25GL2su",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "❎ Cancelled",
+        "completionMessage": "No changes were made to the database.",
+        "options": {}
+      },
+      "id": "deactivate-can",
+      "name": "Cancelled - Deactivate",
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 2.4,
+      "position": [
+        2040,
+        1300
+      ],
+      "webhookId": "team-deact-can"
+    }
+  ],
+  "connections": {
+    "Form Trigger": {
+      "main": [
+        [
+          {
+            "node": "Check Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Action": {
+      "main": [
+        [
+          {
+            "node": "Add Team Form",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Active Teams",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Inactive Teams",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Active Teams (Deactive)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Team Form": {
+      "main": [
+        [
+          {
+            "node": "Is Grouped?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Grouped?": {
+      "main": [
+        [
+          {
+            "node": "Grouping Interval Form",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Normalize Add Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grouping Interval Form": {
+      "main": [
+        [
+          {
+            "node": "Normalize Add Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Add Data": {
+      "main": [
+        [
+          {
+            "node": "Check Duplicate Team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Duplicate Team": {
+      "main": [
+        [
+          {
+            "node": "Team Exists?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Team Exists?": {
+      "main": [
+        [
+          {
+            "node": "Duplicate Warning",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Confirm Add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Add": {
+      "main": [
+        [
+          {
+            "node": "Add Confirmed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Confirmed?": {
+      "main": [
+        [
+          {
+            "node": "Insert Team",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelled - Add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Team": {
+      "main": [
+        [
+          {
+            "node": "Success - Added",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success - Added": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML Email Add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML Email Add": {
+      "main": [
+        [
+          {
+            "node": "Send Email Add",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Teams": {
+      "main": [
+        [
+          {
+            "node": "Build Remove Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Remove Form": {
+      "main": [
+        [
+          {
+            "node": "Select Team to Remove",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Team to Remove": {
+      "main": [
+        [
+          {
+            "node": "Prepare Remove Confirm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Remove Confirm": {
+      "main": [
+        [
+          {
+            "node": "Confirm Remove",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Remove": {
+      "main": [
+        [
+          {
+            "node": "Remove Confirmed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Confirmed?": {
+      "main": [
+        [
+          {
+            "node": "Remove Team (DB)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelled - Remove",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Team (DB)": {
+      "main": [
+        [
+          {
+            "node": "Success - Remove",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success - Remove": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML Email Remove",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML Email Remove": {
+      "main": [
+        [
+          {
+            "node": "Send Email Remove",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Inactive Teams": {
+      "main": [
+        [
+          {
+            "node": "Build Activate Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Activate Form": {
+      "main": [
+        [
+          {
+            "node": "Select Team to Activate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Team to Activate": {
+      "main": [
+        [
+          {
+            "node": "Prepare Activate Confirm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Activate Confirm": {
+      "main": [
+        [
+          {
+            "node": "Confirm Activate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Activate": {
+      "main": [
+        [
+          {
+            "node": "Activate Confirmed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activate Confirmed?": {
+      "main": [
+        [
+          {
+            "node": "Activate Team (DB)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelled - Activate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Activate Team (DB)": {
+      "main": [
+        [
+          {
+            "node": "Success - Activate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success - Activate": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML Email Activate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML Email Activate": {
+      "main": [
+        [
+          {
+            "node": "Send Email Activate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Active Teams (Deactive)": {
+      "main": [
+        [
+          {
+            "node": "Build Deactivate Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Deactivate Form": {
+      "main": [
+        [
+          {
+            "node": "Select Team to Deactivate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Team to Deactivate": {
+      "main": [
+        [
+          {
+            "node": "Prepare Deactivate Confirm",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Deactivate Confirm": {
+      "main": [
+        [
+          {
+            "node": "Confirm Deactivate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Deactivate": {
+      "main": [
+        [
+          {
+            "node": "Deactivate Confirmed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deactivate Confirmed?": {
+      "main": [
+        [
+          {
+            "node": "Deactivate Team (DB)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Cancelled - Deactivate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deactivate Team (DB)": {
+      "main": [
+        [
+          {
+            "node": "Success - Deactivate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success - Deactivate": {
+      "main": [
+        [
+          {
+            "node": "Generate HTML Email Deactivate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate HTML Email Deactivate": {
+      "main": [
+        [
+          {
+            "node": "Send Email Deactivate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "cb6d6f40e09b12906e93b5f7d6e4e322f313ea7c81bd3832c2ab6630157d246f"
+  }
+}
